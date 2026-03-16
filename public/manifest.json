@@ -1,0 +1,16 @@
+{
+  "name": "Kalkulator THR",
+  "short_name": "THR Calc",
+  "description": "Atur anggaran berbagi kebahagiaan dengan bijak dan berkah.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fff9eb",
+  "theme_color": "#fff9eb",
+  "icons": [
+    {
+      "src": "/globe.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}
