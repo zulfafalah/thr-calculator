@@ -35,7 +35,6 @@ interface ResultItem {
   weightLabel: string;
   amountPerPerson: number;
   total: number;
-  distributed: boolean;
 }
 
 // --- Icon color themes for variety ---
@@ -73,7 +72,6 @@ function distributeTHR(recipients: Recipient[], config: ThrConfig): ResultItem[]
       weightLabel: r.weightLabel,
       amountPerPerson: perPerson,
       total: perPerson * r.count,
-      distributed: false,
     }));
   } else {
     // Weighted: total_score = Σ (weight_i × count_i)
@@ -93,7 +91,6 @@ function distributeTHR(recipients: Recipient[], config: ThrConfig): ResultItem[]
         weightLabel: r.weightLabel,
         amountPerPerson: perPerson,
         total: perPerson * r.count,
-        distributed: false,
       };
     });
   }
@@ -176,6 +173,7 @@ export default function HasilPage() {
   const [config, setConfig] = useState<ThrConfig | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
+  const [distributedSlotIds, setDistributedSlotIds] = useState<string[]>([]);
   const router = useRouter();
 
   // ── Restore state from URL hash if present ──
@@ -201,34 +199,25 @@ export default function HasilPage() {
       const thrConfig: ThrConfig = JSON.parse(configRaw);
       setConfig(thrConfig);
 
-      // Restore previously distributed (checked) state
-      const distributedRaw = localStorage.getItem('distributed_ids');
-      const distributedIds: string[] = distributedRaw ? JSON.parse(distributedRaw) : [];
-
       // Run distribution algorithm
       const distributed = distributeTHR(recipients, thrConfig);
-
-      // Re-apply distributed checkbox state
-      distributed.forEach(r => {
-        if (distributedIds.includes(r.id)) {
-          r.distributed = true;
-        }
-      });
-
       setResults(distributed);
+
+      // Restore previously distributed (checked) slot state
+      const distributedRaw = localStorage.getItem('distributed_slot_ids');
+      const restoredSlotIds: string[] = distributedRaw ? JSON.parse(distributedRaw) : [];
+      setDistributedSlotIds(restoredSlotIds);
     }
 
     setIsLoaded(true);
   }, []);
 
-  const toggleDistributed = useCallback((id: string) => {
-    setResults(prev => {
-      const updated = prev.map(r =>
-        r.id === id ? { ...r, distributed: !r.distributed } : r
-      );
-      // Persist to localStorage
-      const distributedIds = updated.filter(r => r.distributed).map(r => r.id);
-      localStorage.setItem('distributed_ids', JSON.stringify(distributedIds));
+  const toggleDistributed = useCallback((slotId: string) => {
+    setDistributedSlotIds(prev => {
+      const updated = prev.includes(slotId)
+        ? prev.filter(id => id !== slotId)
+        : [...prev, slotId];
+      localStorage.setItem('distributed_slot_ids', JSON.stringify(updated));
       return updated;
     });
   }, []);
@@ -283,13 +272,24 @@ export default function HasilPage() {
   const isOverBudget = totalAllocated > budget;
 
   // Progress = how much has been physically given out (checked)
-  const totalGiven = results
-    .filter(r => r.distributed)
-    .reduce((sum, r) => sum + r.total, 0);
+  // Expand results into individual person slots
+  const allSlots = results.flatMap((item, itemIndex) =>
+    Array.from({ length: item.count }, (_, i) => ({
+      slotId: `${item.id}__${i}`,
+      ...item,
+      personIndex: i + 1,
+      itemIndex,
+      distributed: distributedSlotIds.includes(`${item.id}__${i}`),
+    }))
+  );
+
+  const totalGiven = allSlots
+    .filter(s => s.distributed)
+    .reduce((sum, s) => sum + s.amountPerPerson, 0);
   const progressPercentage = totalAllocated > 0
     ? Math.min((totalGiven / totalAllocated) * 100, 100)
     : 0;
-  const allDistributed = results.length > 0 && results.every(r => r.distributed);
+  const allDistributed = allSlots.length > 0 && allSlots.every(s => s.distributed);
 
   if (!isLoaded) return null;
 
@@ -386,34 +386,36 @@ export default function HasilPage() {
         <section className="space-y-4">
           <h3 className="text-xs font-label uppercase tracking-widest text-on-surface-variant/60 mb-2">Daftar Penerima</h3>
 
-          {results.map((item, index) => {
-            const theme = ICON_THEMES[index % ICON_THEMES.length];
+          {allSlots.map((slot) => {
+            const theme = ICON_THEMES[slot.itemIndex % ICON_THEMES.length];
+            const displayTitle = slot.count > 1
+              ? `${slot.title} ${slot.personIndex}`
+              : slot.title;
             return (
               <div
-                key={item.id}
+                key={slot.slotId}
                 className={`rounded-xl p-5 shadow-sm flex items-center justify-between group transition-all duration-300 ${
-                  item.distributed
+                  slot.distributed
                     ? 'bg-surface-container-low opacity-70 grayscale-[0.5]'
                     : 'bg-surface-container-lowest'
                 }`}
               >
                 <div className="flex items-center gap-4">
                   <div className={`w-12 h-12 rounded-full ${theme.bg} flex items-center justify-center ${theme.text}`}>
-                    <span className="material-symbols-outlined" data-icon={item.icon}>{item.icon}</span>
+                    <span className="material-symbols-outlined" data-icon={slot.icon}>{slot.icon}</span>
                   </div>
                   <div>
-                    <h4 className="font-bold text-on-surface">{item.title}</h4>
+                    <h4 className="font-bold text-on-surface">{displayTitle}</h4>
                     <p className="text-xs text-on-surface-variant">
-                      {item.count} orang × {formatRupiah(item.amountPerPerson)}
-                      <span className="ml-1 opacity-60">({item.weightLabel})</span>
+                      {formatRupiah(slot.amountPerPerson)}
+                      <span className="ml-1 opacity-60">({slot.weightLabel})</span>
                     </p>
-                    <p className="text-sm font-bold text-primary mt-1">{formatRupiah(item.total)}</p>
                   </div>
                 </div>
 
-                {item.distributed ? (
+                {slot.distributed ? (
                   <button
-                    onClick={() => toggleDistributed(item.id)}
+                    onClick={() => toggleDistributed(slot.slotId)}
                     className="flex flex-col items-center gap-1 cursor-pointer"
                   >
                     <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center">
@@ -423,7 +425,7 @@ export default function HasilPage() {
                   </button>
                 ) : (
                   <button
-                    onClick={() => toggleDistributed(item.id)}
+                    onClick={() => toggleDistributed(slot.slotId)}
                     className="flex flex-col items-center gap-1 group/btn cursor-pointer"
                   >
                     <div className="w-8 h-8 rounded-full border-2 border-outline-variant flex items-center justify-center text-outline-variant group-hover/btn:border-secondary group-hover/btn:text-secondary transition-all">
