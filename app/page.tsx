@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import BottomNavBar from '@/app/components/BottomNavBar';
+import Header from '@/app/components/Header';
 
 export default function Home() {
   const [budget, setBudget] = useState<string>('');
@@ -26,17 +27,7 @@ export default function Home() {
   return (
 
     <>
-      <header className="flex justify-between items-center px-6 py-4 w-full bg-surface/80 backdrop-blur-xl docked full-width top-0 sticky z-50">
-        <div className="flex items-center gap-3">
-          <span className="material-symbols-outlined text-primary text-2xl" data-icon="mosque">mosque</span>
-          <h1 className="text-xl font-bold text-on-surface tracking-tight font-headline">Kalkulator THR</h1>
-        </div>
-        <div className="flex items-center gap-4">
-          <button className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-primary/10 transition-colors active:scale-95 duration-150">
-            <span className="material-symbols-outlined" data-icon="notifications">notifications</span>
-          </button>
-        </div>
-      </header>
+      <Header />
       <main className="w-full max-w-md px-6 pt-8 pb-32 flex flex-col gap-10 relative">
         {/* Header Section with Mosque Silhouette */}
         <section className="relative pt-12 text-center overflow-hidden">

@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import BottomNavBar from '@/app/components/BottomNavBar';
+import Header from '@/app/components/Header';
 
 export default function PenerimaPage() {
   const [recipientsData, setRecipientsData] = useState([
@@ -100,18 +101,7 @@ export default function PenerimaPage() {
 
   return (
     <>
-      {/* Top Navigation Shell */}
-      <header className="bg-surface/80 backdrop-blur-xl docked full-width top-0 sticky z-50 flex justify-between items-center px-6 py-4 w-full">
-        <div className="flex items-center gap-3">
-          <span className="material-symbols-outlined text-primary-container text-2xl" data-icon="mosque">mosque</span>
-          <h1 className="text-xl font-bold text-on-surface tracking-tight font-headline">Kalkulator THR</h1>
-        </div>
-        <div className="flex items-center gap-4">
-          <button className="hover:bg-primary/10 transition-colors p-2 rounded-full">
-            <span className="material-symbols-outlined text-on-surface-variant" data-icon="notifications">notifications</span>
-          </button>
-        </div>
-      </header>
+      <Header />
 
       <main className="max-w-md mx-auto px-6 pt-12 pb-[240px] relative">
         {/* Hero Section */}

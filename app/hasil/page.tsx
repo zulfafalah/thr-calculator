@@ -1,5 +1,6 @@
 import React from 'react';
 import BottomNavBar from '@/app/components/BottomNavBar';
+import Header from '@/app/components/Header';
 
 export default function HasilPage() {
   const resultData = [
@@ -48,18 +49,7 @@ export default function HasilPage() {
 
   return (
     <>
-      {/* TopAppBar */}
-      <header className="flex justify-between items-center px-6 py-4 w-full bg-surface/80 backdrop-blur-xl docked full-width top-0 sticky z-50 shadow-[0_20px_40px_rgba(246,190,57,0.06)]">
-        <div className="flex items-center gap-3">
-          <span className="material-symbols-outlined text-primary" data-icon="mosque">mosque</span>
-          <h1 className="text-xl font-bold text-on-surface tracking-tight font-headline">Kalkulator THR</h1>
-        </div>
-        <div className="flex items-center gap-4">
-          <button className="hover:bg-primary/10 transition-colors p-2 rounded-full flex items-center justify-center active:scale-95 duration-150">
-            <span className="material-symbols-outlined text-on-surface-variant" data-icon="notifications">notifications</span>
-          </button>
-        </div>
-      </header>
+      <Header />
 
       <main className="w-full max-w-md px-6 pt-8 pb-32 space-y-8 relative">
         {/* Header Section */}
