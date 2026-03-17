@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import BottomNavBar from '@/app/components/BottomNavBar';
 
 export default function Home() {
@@ -83,11 +84,11 @@ export default function Home() {
           </div>
 
           {/* CTA Button */}
-          <button className="w-full py-5 rounded-lg shimmer-gold text-on-secondary-fixed font-bold text-lg flex items-center justify-center gap-3 shadow-[0_12px_24px_rgba(121,89,0,0.2)] active:scale-95 transition-all group overflow-hidden relative">
+          <Link href="/penerima" className="w-full py-5 rounded-lg shimmer-gold text-on-secondary-fixed font-bold text-lg flex items-center justify-center gap-3 shadow-[0_12px_24px_rgba(121,89,0,0.2)] active:scale-95 transition-all group overflow-hidden relative">
             <span className="relative z-10">Atur Penerima</span>
             <span className="material-symbols-outlined relative z-10 group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
             <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
-          </button>
+          </Link>
         </div>
       </main>
 
