@@ -1,9 +1,29 @@
-import React from 'react';
+"use client";
+import React, { useState } from 'react';
 import Link from 'next/link';
 import BottomNavBar from '@/app/components/BottomNavBar';
 
 export default function Home() {
+  const [budget, setBudget] = useState<string>('');
+  const [showModeInfo, setShowModeInfo] = useState<boolean>(false);
+  const [distributionMode, setDistributionMode] = useState<'weighted' | 'equal'>('weighted');
+
+
+  const handleBudgetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Remove non-digit characters
+    const value = e.target.value.replace(/\D/g, '');
+    
+    // Format with thousands separator
+    if (value) {
+      const formatted = parseInt(value, 10).toLocaleString('id-ID');
+      setBudget(formatted);
+    } else {
+      setBudget('');
+    }
+  };
+
   return (
+
     <>
       <header className="flex justify-between items-center px-6 py-4 w-full bg-surface/80 backdrop-blur-xl docked full-width top-0 sticky z-50">
         <div className="flex items-center gap-3">
@@ -27,7 +47,7 @@ export default function Home() {
               <span className="material-symbols-outlined text-3xl" data-icon="dark_mode" style={{ fontVariationSettings: "'FILL' 1" }}>dark_mode</span>
               <span className="material-symbols-outlined text-sm" data-icon="star" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
             </div>
-            <h2 className="text-4xl font-headline font-bold text-on-surface leading-tight">Selamat Hari Raya 🌙</h2>
+            <h2 className="text-4xl font-headline font-bold text-on-surface leading-tight">Selamat Hari Raya</h2>
             <p className="text-on-surface-variant max-w-[280px] text-center mx-auto mt-2">Atur anggaran berbagi kebahagiaan dengan bijak dan berkah.</p>
           </div>
         </section>
@@ -40,7 +60,13 @@ export default function Home() {
             <label className="block text-sm font-label uppercase tracking-widest text-on-surface-variant/70 mb-4">Total Anggaran THR</label>
             <div className="relative flex items-center">
               <span className="absolute left-0 text-2xl font-bold text-secondary font-headline">Rp</span>
-              <input className="w-full bg-transparent border-none p-0 pl-12 text-5xl font-headline font-bold text-primary focus:ring-0 outline-none placeholder:text-surface-container-highest" placeholder="0" type="text" defaultValue="0" />
+              <input 
+                className="w-full bg-transparent border-none p-0 pl-12 text-5xl font-headline font-bold text-primary focus:ring-0 outline-none placeholder:text-surface-container-highest" 
+                placeholder="0" 
+                type="text" 
+                value={budget}
+                onChange={handleBudgetChange}
+              />
             </div>
             <div className="mt-4 flex items-center gap-2 text-on-surface-variant text-sm">
               <span className="material-symbols-outlined text-sm" data-icon="info">info</span>
@@ -52,14 +78,47 @@ export default function Home() {
           <div className="grid grid-cols-1 gap-6">
             {/* Distribution Mode */}
             <div className="bg-surface-container-low rounded-xl p-6 flex flex-col gap-4">
-              <div className="flex items-center gap-3">
-                <span className="material-symbols-outlined text-primary" data-icon="account_tree">account_tree</span>
-                <span className="font-bold text-on-surface">Mode Pembagian</span>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <span className="material-symbols-outlined text-primary" data-icon="account_tree">account_tree</span>
+                  <span className="font-bold text-on-surface">Mode Pembagian</span>
+                </div>
+                <button 
+                  onClick={() => setShowModeInfo(!showModeInfo)}
+                  className="w-6 h-6 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors active:scale-95"
+                >
+                  <span className="material-symbols-outlined text-sm" data-icon="help">help</span>
+                </button>
               </div>
               <div className="flex bg-surface-container-highest p-1 rounded-lg">
-                <button className="flex-1 py-2 text-sm font-bold bg-primary-container text-on-primary-container rounded-lg shadow-sm">Rata</button>
-                <button className="flex-1 py-2 text-sm font-medium text-on-surface-variant hover:text-secondary transition-colors">Berbobot</button>
+                <button 
+                  onClick={() => setDistributionMode('weighted')}
+                  className={`flex-1 py-2 text-sm rounded-lg transition-all ${distributionMode === 'weighted' ? 'font-bold bg-primary-container text-on-primary-container shadow-sm' : 'font-medium text-on-surface-variant hover:text-secondary'}`}
+                >
+                  Berbobot
+                </button>
+                <button 
+                  onClick={() => setDistributionMode('equal')}
+                  className={`flex-1 py-2 text-sm rounded-lg transition-all ${distributionMode === 'equal' ? 'font-bold bg-primary-container text-on-primary-container shadow-sm' : 'font-medium text-on-surface-variant hover:text-secondary'}`}
+                >
+                  Rata
+                </button>
               </div>
+              {showModeInfo && (
+                <div className="p-3 flex flex-col gap-3 bg-surface-container rounded-lg text-sm text-on-surface-variant border border-outline-variant/30 leading-relaxed text-left animate-in fade-in duration-200">
+                  {distributionMode === 'weighted' ? (
+                    <div>
+                      <span className="font-bold text-primary block mb-1">Mode Berbobot:</span>
+                      Membagi THR secara proporsional berdasarkan bobot (seperti usia, hubungan, atau prioritas), sehingga nominal yang diterima berbeda-beda sesuai kelompoknya.
+                    </div>
+                  ) : (
+                    <div>
+                      <span className="font-bold text-primary block mb-1">Mode Rata:</span>
+                      Membagi total anggaran THR secara merata ke semua keluarga atau kerabat, sehingga masing-masing mendapatkan jumlah nominal yang sama besar.
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* Rounding Control */}
