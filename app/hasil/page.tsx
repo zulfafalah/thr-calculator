@@ -49,25 +49,23 @@ export default function HasilPage() {
   return (
     <>
       {/* TopAppBar */}
-      <header className="bg-surface/80 backdrop-blur-xl docked full-width top-0 sticky z-50 shadow-[0_20px_40px_rgba(246,190,57,0.06)]">
-        <div className="flex justify-between items-center px-6 py-4 w-full">
-          <div className="flex items-center gap-3">
-            <span className="material-symbols-outlined text-primary" data-icon="mosque">mosque</span>
-            <h1 className="text-xl font-bold text-on-surface tracking-tight font-headline">Kalkulator THR</h1>
-          </div>
-          <div className="flex items-center gap-4">
-            <button className="hover:bg-primary/10 transition-colors p-2 rounded-full flex items-center justify-center active:scale-95 duration-150">
-              <span className="material-symbols-outlined text-on-surface-variant" data-icon="notifications">notifications</span>
-            </button>
-          </div>
+      <header className="flex justify-between items-center px-6 py-4 w-full bg-surface/80 backdrop-blur-xl docked full-width top-0 sticky z-50 shadow-[0_20px_40px_rgba(246,190,57,0.06)]">
+        <div className="flex items-center gap-3">
+          <span className="material-symbols-outlined text-primary" data-icon="mosque">mosque</span>
+          <h1 className="text-xl font-bold text-on-surface tracking-tight font-headline">Kalkulator THR</h1>
+        </div>
+        <div className="flex items-center gap-4">
+          <button className="hover:bg-primary/10 transition-colors p-2 rounded-full flex items-center justify-center active:scale-95 duration-150">
+            <span className="material-symbols-outlined text-on-surface-variant" data-icon="notifications">notifications</span>
+          </button>
         </div>
       </header>
 
-      <main className="max-w-md mx-auto px-6 pt-8 pb-32 space-y-8">
+      <main className="w-full max-w-md px-6 pt-8 pb-32 space-y-8 relative">
         {/* Header Section */}
         <section className="space-y-2">
           <h2 className="text-3xl font-bold font-headline text-on-surface leading-tight flex items-center gap-2">
-            Rincian THR Kamu 
+            Rincian THR Kamu
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-secondary shrink-0">
               <polyline points="20 12 20 22 4 22 4 12"></polyline>
               <rect x="2" y="7" width="20" height="5"></rect>
@@ -81,18 +79,20 @@ export default function HasilPage() {
         {/* Summary Banner Card */}
         <section className="relative bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-outline-variant/30 overflow-hidden">
           {/* Shimmer Gold Top Border */}
-          <div className="grid grid-cols-3 gap-0 mb-6 divide-x divide-outline-variant/30">
-            <div className="space-y-1 pr-2 text-center">
+          <div className="flex flex-col gap-4 mb-6">
+            <div className="space-y-1 text-center border-b border-outline-variant/30 pb-4">
               <p className="text-[10px] font-label uppercase tracking-widest text-on-surface-variant/70">Total Budget</p>
-              <p className="text-sm md:text-base font-bold font-headline text-primary truncate">Rp 5.000.000</p>
+              <p className="text-xl md:text-2xl font-bold font-headline text-primary truncate">Rp 5.000.000</p>
             </div>
-            <div className="space-y-1 px-2 text-center">
-              <p className="text-[10px] font-label uppercase tracking-widest text-on-surface-variant/70">Terbagi</p>
-              <p className="text-sm md:text-base font-bold font-headline text-secondary truncate">Rp 5.150.000</p>
-            </div>
-            <div className="space-y-1 pl-2 text-center">
-              <p className="text-[10px] font-label uppercase tracking-widest text-on-surface-variant/70">Sisa</p>
-              <p className="text-sm md:text-base font-bold font-headline text-error truncate">-Rp 150.000</p>
+            <div className="flex justify-center items-center divide-x divide-outline-variant/30">
+              <div className="space-y-1 px-6 sm:px-10 text-center">
+                <p className="text-[10px] font-label uppercase tracking-widest text-on-surface-variant/70">Terbagi</p>
+                <p className="text-sm md:text-base font-bold font-headline text-secondary truncate">Rp 5.150.000</p>
+              </div>
+              <div className="space-y-1 px-6 sm:px-10 text-center">
+                <p className="text-[10px] font-label uppercase tracking-widest text-on-surface-variant/70">Sisa</p>
+                <p className="text-sm md:text-base font-bold font-headline text-error truncate">-Rp 150.000</p>
+              </div>
             </div>
           </div>
           {/* Progress Bar */}
@@ -105,10 +105,10 @@ export default function HasilPage() {
         {/* List of Result Cards */}
         <section className="space-y-4">
           <h3 className="text-xs font-label uppercase tracking-widest text-on-surface-variant/60 mb-2">Daftar Penerima</h3>
-          
+
           {resultData.map((item) => (
-            <div 
-              key={item.id} 
+            <div
+              key={item.id}
               className={`rounded-xl p-5 shadow-sm flex items-center justify-between group ${item.status === 'Sudah Dibagi' ? 'bg-surface-container-low opacity-70 grayscale-[0.5]' : 'bg-surface-container-lowest'}`}
             >
               <div className="flex items-center gap-4">
@@ -156,15 +156,6 @@ export default function HasilPage() {
       </main>
 
       <BottomNavBar />
-
-      {/* Image for Decorative Background */}
-      <div className="fixed inset-0 -z-10 pointer-events-none opacity-5">
-        <img 
-          alt="Islamic geometric pattern background" 
-          className="w-full h-full object-cover" 
-          src="https://lh3.googleusercontent.com/aida-public/AB6AXuCsS02D8eSgmFwVbcs8Rm72W1FxGE2xBZumM1yDp4QKuiWf2J0-OQRuHpqU9wERvKKa4EPbvVtFKVj6XVF1LJd-X5CoiHkYeD7CxPsXGMBK9bZqUejWmAWxoI73prMwQ_BDT2e0wVIchpaGvFAnRam80q54fzy4OXAmJBD_SyCABKrWBJ9ra_sXcmtv0Eq9nKxpl3jf5YS7T4SSiLGZn3kmFMgpDbitFrBr_K835fZgUs3lcVD373sMrPB9JkwCgNDrtta7vrelht0"
-        />
-      </div>
     </>
   );
 }
