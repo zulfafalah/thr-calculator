@@ -39,7 +39,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id">
+    <html lang="id" suppressHydrationWarning>
       <head>
         <link
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
@@ -47,6 +47,7 @@ export default function RootLayout({
         />
       </head>
       <body
+        suppressHydrationWarning
         className={`${manrope.variable} ${notoSerif.variable} antialiased bg-surface-dim font-body text-on-surface min-h-screen flex flex-col items-center overflow-x-hidden`}
       >
         <div className="w-full max-w-md min-h-screen bg-surface flex flex-col relative shadow-2xl sm:border-x border-outline-variant/30">
