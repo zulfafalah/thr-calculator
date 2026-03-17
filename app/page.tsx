@@ -28,16 +28,38 @@ export default function Home() {
 
     <>
       <Header />
-      <main className="w-full max-w-md px-6 pt-8 pb-32 flex flex-col gap-10 relative">
+      <main className="w-full max-w-md px-6 pt-3 pb-32 flex flex-col gap-4 relative">
         {/* Header Section with Mosque Silhouette */}
-        <section className="relative pt-12 text-center overflow-hidden">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-32 opacity-10 pointer-events-none mosque-silhouette">
-            <span className="material-symbols-outlined text-[160px]" data-icon="mosque" style={{ fontVariationSettings: "'FILL' 1" }}>mosque</span>
+        <section className="relative pt-10 text-center overflow-hidden">
+          {/* Mosque Silhouette — anchored at horizon bottom */}
+          <div className="absolute inset-x-0 bottom-0 flex justify-center pointer-events-none select-none">
+            <span
+              className="material-symbols-outlined text-[200px] text-secondary leading-none -mb-8 opacity-[0.11]"
+              style={{ fontVariationSettings: "'FILL' 1" }}
+            >mosque</span>
           </div>
-          <div className="relative z-10 flex flex-col items-center gap-2">
-            <div className="flex items-center gap-2 text-secondary mb-2">
-              <span className="material-symbols-outlined text-3xl" data-icon="dark_mode" style={{ fontVariationSettings: "'FILL' 1" }}>dark_mode</span>
-              <span className="material-symbols-outlined text-sm" data-icon="star" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+
+          {/* Scattered ambient stars */}
+          <span className="absolute top-3 left-6 material-symbols-outlined text-[10px] text-secondary opacity-30 pointer-events-none select-none" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+          <span className="absolute top-7 right-8 material-symbols-outlined text-xs text-secondary opacity-20 pointer-events-none select-none" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+          <span className="absolute top-16 left-14 material-symbols-outlined text-[8px] text-secondary opacity-25 pointer-events-none select-none" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+          <span className="absolute top-12 right-16 material-symbols-outlined text-[8px] text-secondary opacity-20 pointer-events-none select-none" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+
+          <div className="relative z-10 flex flex-col items-center gap-2 pb-4">
+            {/* Crescent Moon with flanking stars */}
+            <div className="flex items-center gap-3 text-secondary mb-3">
+              <div className="flex flex-col items-center gap-[3px] translate-y-1">
+                <span className="material-symbols-outlined text-sm opacity-70" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                <span className="material-symbols-outlined text-[10px] opacity-40" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+              </div>
+              <span
+                className="material-symbols-outlined text-[56px] drop-shadow-[0_0_18px_rgba(212,160,23,0.55)]"
+                style={{ fontVariationSettings: "'FILL' 1" }}
+              >dark_mode</span>
+              <div className="flex flex-col items-center gap-[3px] -translate-y-1">
+                <span className="material-symbols-outlined text-[10px] opacity-40" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                <span className="material-symbols-outlined text-sm opacity-70" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+              </div>
             </div>
             <h2 className="text-4xl font-headline font-bold text-on-surface leading-tight">Selamat Hari Raya</h2>
             <p className="text-on-surface-variant max-w-[280px] text-center mx-auto mt-2">Atur anggaran berbagi kebahagiaan dengan bijak dan berkah.</p>
