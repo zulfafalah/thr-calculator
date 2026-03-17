@@ -1,9 +1,11 @@
-import React from 'react';
+"use client";
+
+import React, { useState } from 'react';
 import Link from 'next/link';
 import BottomNavBar from '@/app/components/BottomNavBar';
 
 export default function PenerimaPage() {
-  const recipientsData = [
+  const [recipientsData, setRecipientsData] = useState([
     {
       id: "orang-tua",
       title: "Orang Tua",
@@ -12,8 +14,7 @@ export default function PenerimaPage() {
       bgIcon: "diversity_3",
       count: 2,
       active: true,
-      featured: true,
-      disabled: false,
+      featured: false,
     },
     {
       id: "saudara",
@@ -23,7 +24,6 @@ export default function PenerimaPage() {
       count: 3,
       active: true,
       featured: false,
-      disabled: false,
     },
     {
       id: "ponakan",
@@ -33,7 +33,6 @@ export default function PenerimaPage() {
       count: 12,
       active: true,
       featured: false,
-      disabled: false,
     },
     {
       id: "art",
@@ -43,7 +42,6 @@ export default function PenerimaPage() {
       count: 2,
       active: true,
       featured: false,
-      disabled: false,
     },
     {
       id: "mertua",
@@ -51,11 +49,54 @@ export default function PenerimaPage() {
       weightLabel: "",
       icon: "person_add",
       count: 0,
-      active: false,
+      active: true,
       featured: false,
-      disabled: true,
     },
-  ];
+  ]);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [newCategory, setNewCategory] = useState({ title: "", weightLabel: "Bobot 1x" });
+
+  const handleAddCategory = () => {
+    if (!newCategory.title.trim()) return;
+
+    const newId = newCategory.title.toLowerCase().replace(/\s+/g, '-');
+
+    setRecipientsData(prev => [
+      ...prev,
+      {
+        id: newId,
+        title: newCategory.title,
+        weightLabel: newCategory.weightLabel,
+        icon: "person",
+        count: 1,
+        active: true,
+        featured: false,
+      }
+    ]);
+
+    setNewCategory({ title: "", weightLabel: "Bobot 1x" });
+    setIsModalOpen(false);
+  };
+
+  const updateCount = (id: string, delta: number) => {
+    setRecipientsData(prev => prev.map(item => {
+      if (item.id === id) {
+        const newCount = Math.max(0, item.count + delta);
+        return { ...item, count: newCount, active: newCount > 0 };
+      }
+      return item;
+    }));
+  };
+
+  const toggleActive = (id: string) => {
+    setRecipientsData(prev => prev.map(item => {
+      if (item.id === id) {
+        return { ...item, active: !item.active };
+      }
+      return item;
+    }));
+  };
 
   return (
     <>
@@ -71,7 +112,7 @@ export default function PenerimaPage() {
           </button>
         </div>
       </header>
-      
+
       <main className="max-w-md mx-auto px-6 pt-12 pb-[240px] relative">
         {/* Hero Section */}
         <section className="mb-12 text-center relative">
@@ -83,22 +124,8 @@ export default function PenerimaPage() {
           <p className="text-on-surface-variant max-w-sm mx-auto">Tentukan jumlah penerima dan atur bobot pembagian untuk setiap kategori keluarga dan kerabat.</p>
         </section>
 
-        {/* Weighted Mode Banner */}
-        <div className="bg-surface-container-low rounded-xl p-4 mb-8 flex items-center justify-between shadow-sm border border-outline-variant/10">
-          <div className="flex items-center gap-3">
-            <span className="material-symbols-outlined text-secondary" data-icon="settings_suggest">settings_suggest</span>
-            <div>
-              <p className="text-sm font-bold text-on-surface tracking-tight">Mode Bobot Aktif</p>
-              <p className="text-xs text-on-surface-variant">Atur porsi berbeda tiap kategori</p>
-            </div>
-          </div>
-          <div className="w-12 h-6 bg-primary-container rounded-full relative p-1 cursor-pointer">
-            <div className="w-4 h-4 bg-white rounded-full ml-auto"></div>
-          </div>
-        </div>
-
         {/* Ornamental Divider */}
-        <div className="flex items-center justify-center gap-4 mb-10 opacity-30">
+        <div className="flex items-center justify-center gap-4 mb-5 opacity-30">
           <div className="h-[1px] w-full bg-gradient-to-r from-transparent to-secondary"></div>
           <span className="material-symbols-outlined text-secondary" data-icon="stars">stars</span>
           <div className="h-[1px] w-full bg-gradient-to-l from-transparent to-secondary"></div>
@@ -109,13 +136,8 @@ export default function PenerimaPage() {
           {recipientsData.map((item) => (
             <div
               key={item.id}
-              className={`rounded-xl p-6 relative overflow-hidden group ${
-                item.disabled
-                  ? "bg-surface-container-low/50 shadow-none border-t-2 border-outline-variant/30 opacity-60 grayscale"
-                  : `bg-surface-container-lowest shadow-[0_20px_40px_rgba(212,160,23,0.06)] border-t-2 ${
-                      item.featured ? "border-secondary" : "border-secondary/20"
-                    }`
-              }`}
+              className={`rounded-xl p-6 relative overflow-hidden group bg-surface-container-lowest shadow-[0_20px_40px_rgba(212,160,23,0.06)] border-t-2 ${item.featured ? "border-secondary" : "border-secondary/20"
+                }`}
             >
               {item.bgIcon && (
                 <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
@@ -130,16 +152,10 @@ export default function PenerimaPage() {
               <div className="flex justify-between items-start mb-6 relative z-10">
                 <div className="flex items-center gap-3">
                   <div
-                    className={`p-2 rounded-lg ${
-                      item.disabled ? "bg-on-surface-variant/5" : "bg-primary/5"
-                    }`}
+                    className="p-2 rounded-lg bg-primary/5"
                   >
                     <span
-                      className={`material-symbols-outlined ${
-                        item.disabled
-                          ? "text-on-surface-variant"
-                          : "text-primary-container"
-                      }`}
+                      className="material-symbols-outlined text-primary-container"
                       data-icon={item.icon}
                     >
                       {item.icon}
@@ -149,41 +165,38 @@ export default function PenerimaPage() {
                     <h3 className="font-bold text-on-surface">{item.title}</h3>
                     {item.weightLabel && (
                       <span
-                        className={`text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-tighter ${
-                          item.featured
-                            ? "bg-secondary-fixed text-on-secondary-fixed"
-                            : "bg-surface-container-highest text-on-surface-variant"
-                        }`}
+                        className={`text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-tighter ${item.featured
+                          ? "bg-secondary-fixed text-on-secondary-fixed"
+                          : "bg-surface-container-highest text-on-surface-variant"
+                          }`}
                       >
                         {item.weightLabel}
                       </span>
                     )}
                   </div>
                 </div>
-                <input
-                  defaultChecked={item.active}
-                  className="rounded-full w-5 h-5 text-primary-container border-outline-variant focus:ring-secondary transition-all"
-                  type="checkbox"
-                />
+                <div className="relative flex items-center justify-center">
+                  <input
+                    checked={item.active}
+                    onChange={() => toggleActive(item.id)}
+                    className="peer appearance-none w-6 h-6 rounded-md border-2 border-outline-variant bg-surface-container-highest checked:bg-primary checked:border-primary focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-1 transition-all cursor-pointer m-0"
+                    type="checkbox"
+                  />
+                  <span className="material-symbols-outlined absolute pointer-events-none text-on-primary text-[16px] opacity-0 peer-checked:opacity-100 transition-opacity font-bold" data-icon="check">
+                    check
+                  </span>
+                </div>
               </div>
               <div className="flex items-center justify-between relative z-10">
                 <span className="text-sm font-medium text-on-surface-variant">
                   Jumlah
                 </span>
                 <div
-                  className={`flex items-center rounded-lg p-1 ${
-                    item.disabled
-                      ? "bg-surface-container-high"
-                      : "bg-surface-container-low"
-                  }`}
+                  className="flex items-center rounded-lg p-1 bg-surface-container-low"
                 >
                   <button
-                    className={`w-8 h-8 flex items-center justify-center rounded-md transition-all active:scale-95 ${
-                      item.disabled
-                        ? "text-on-surface-variant/30"
-                        : "text-primary-container hover:bg-primary/10"
-                    }`}
-                    disabled={item.disabled}
+                    onClick={() => updateCount(item.id, -1)}
+                    className="w-8 h-8 flex items-center justify-center rounded-md transition-all active:scale-95 text-primary-container hover:bg-primary/10"
                   >
                     <span
                       className="material-symbols-outlined text-lg"
@@ -196,12 +209,8 @@ export default function PenerimaPage() {
                     {item.count}
                   </span>
                   <button
-                    className={`w-8 h-8 flex items-center justify-center rounded-md transition-all active:scale-95 ${
-                      item.disabled
-                        ? "text-on-surface-variant/30"
-                        : "text-primary-container hover:bg-primary/10"
-                    }`}
-                    disabled={item.disabled}
+                    onClick={() => updateCount(item.id, 1)}
+                    className="w-8 h-8 flex items-center justify-center rounded-md transition-all active:scale-95 text-primary-container hover:bg-primary/10"
                   >
                     <span
                       className="material-symbols-outlined text-lg"
@@ -216,12 +225,70 @@ export default function PenerimaPage() {
           ))}
 
           {/* Add Custom Category */}
-          <div className="bg-surface-container-low/30 rounded-xl p-6 border-2 border-dashed border-outline-variant/50 flex flex-col items-center justify-center gap-3 cursor-pointer hover:bg-surface-container-low transition-colors">
+          <div
+            onClick={() => setIsModalOpen(true)}
+            className="bg-surface-container-low/30 rounded-xl p-6 border-2 border-dashed border-outline-variant/50 flex flex-col items-center justify-center gap-3 cursor-pointer hover:bg-surface-container-low transition-colors"
+          >
             <span className="material-symbols-outlined text-3xl text-outline" data-icon="add_circle">add_circle</span>
             <span className="text-sm font-bold text-outline uppercase tracking-wider">Tambah Kategori Lain</span>
           </div>
         </div>
       </main>
+
+      {/* Add Category Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-scrim/40 backdrop-blur-sm">
+          <div className="bg-surface-container-lowest rounded-3xl p-6 w-full max-w-sm shadow-2xl border border-outline-variant/20 relative animate-in fade-in zoom-in-95 duration-200">
+            <h3 className="text-xl font-headline font-bold text-on-surface mb-6">Tambah Penerima Baru</h3>
+
+            <div className="space-y-4 mb-8">
+              <div>
+                <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Nama Kategori</label>
+                <input
+                  type="text"
+                  className="w-full bg-surface-container-high text-on-surface rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-secondary transition-all"
+                  placeholder="Contoh: Sepupu, Tetangga"
+                  value={newCategory.title}
+                  onChange={(e) => setNewCategory({ ...newCategory, title: e.target.value })}
+                  autoFocus
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Bobot Porsi</label>
+                <div className="relative">
+                  <select
+                    className="w-full bg-surface-container-high text-on-surface rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-secondary transition-all appearance-none"
+                    value={newCategory.weightLabel}
+                    onChange={(e) => setNewCategory({ ...newCategory, weightLabel: e.target.value })}
+                  >
+                    <option value="Bobot 0.5x">0.5x (Setengah)</option>
+                    <option value="Bobot 1x">1x (Normal)</option>
+                    <option value="Bobot 2x">2x (Ganda)</option>
+                    <option value="Bobot 3x">3x (Tiga Kali)</option>
+                  </select>
+                  <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none" data-icon="expand_more">expand_more</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="flex-1 py-3 rounded-xl font-bold text-on-surface-variant hover:bg-surface-container-high transition-colors"
+              >
+                Batal
+              </button>
+              <button
+                onClick={handleAddCategory}
+                disabled={!newCategory.title.trim()}
+                className="flex-1 py-3 rounded-xl font-bold bg-primary text-on-primary hover:bg-primary/90 transition-colors shadow-lg shadow-primary/30 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Tambah
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Floating Est. Result Card */}
       <div className="fixed bottom-[112px] left-0 right-0 z-40 px-4 pointer-events-none">
@@ -230,7 +297,9 @@ export default function PenerimaPage() {
             <div className="flex flex-col">
               <span className="text-[10px] uppercase tracking-[0.2em] font-black text-on-primary-container/60 mb-1">Estimasi Alokasi</span>
               <div className="flex flex-col">
-                <span className="text-on-primary-container font-headline font-bold text-xl">Total 19 Orang</span>
+                <span className="text-on-primary-container font-headline font-bold text-xl">
+                  Total {recipientsData.reduce((acc, curr) => curr.active ? acc + curr.count : acc, 0)} Orang
+                </span>
                 <span className="text-secondary-fixed text-xs mt-0.5 opacity-90">• Est. Rp 450.000/org</span>
               </div>
             </div>
