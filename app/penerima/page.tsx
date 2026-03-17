@@ -14,7 +14,7 @@ export default function PenerimaPage() {
       weight: 3.0,
       icon: "elderly",
       bgIcon: "diversity_3",
-      count: 2,
+      count: 0,
       active: true,
     },
     {
@@ -23,7 +23,7 @@ export default function PenerimaPage() {
       weightLabel: "Bobot 1x",
       weight: 1.0,
       icon: "family_restroom",
-      count: 3,
+      count: 0,
       active: true,
     },
     {
@@ -32,7 +32,7 @@ export default function PenerimaPage() {
       weightLabel: "Bobot 0.5x",
       weight: 0.5,
       icon: "child_care",
-      count: 12,
+      count: 0,
       active: true,
     },
     {
@@ -41,7 +41,7 @@ export default function PenerimaPage() {
       weightLabel: "Bobot 2x",
       weight: 2.0,
       icon: "home_work",
-      count: 2,
+      count: 0,
       active: true,
     },
     {
@@ -97,6 +97,10 @@ export default function PenerimaPage() {
       }
       return item;
     }));
+  };
+
+  const handleLihatHasil = () => {
+    localStorage.setItem('recipients_data', JSON.stringify(recipientsData));
   };
 
   return (
@@ -290,7 +294,7 @@ export default function PenerimaPage() {
                 <span className="text-secondary-fixed text-xs mt-0.5 opacity-90">• Est. Rp 450.000/org</span>
               </div>
             </div>
-            <Link href="/hasil" className="bg-secondary-fixed-dim hover:bg-secondary text-on-secondary-fixed font-bold px-4 py-3 rounded-xl transition-all active:scale-95 shadow-lg flex items-center gap-1 flex-shrink-0">
+            <Link href="/hasil" onClick={handleLihatHasil} className="bg-secondary-fixed-dim hover:bg-secondary text-on-secondary-fixed font-bold px-4 py-3 rounded-xl transition-all active:scale-95 shadow-lg flex items-center gap-1 flex-shrink-0">
               <span className="text-sm">Lihat Hasil</span>
               <span className="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
             </Link>
