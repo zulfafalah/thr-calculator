@@ -5,8 +5,9 @@ import BottomNavBar from '@/app/components/BottomNavBar';
 
 export default function Home() {
   const [budget, setBudget] = useState<string>('');
-  const [showModeInfo, setShowModeInfo] = useState<boolean>(false);
+  const [showModeInfo, setShowModeInfo] = useState<boolean>(true);
   const [distributionMode, setDistributionMode] = useState<'weighted' | 'equal'>('weighted');
+  const [rounding, setRounding] = useState<number>(0);
 
 
   const handleBudgetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -127,10 +128,26 @@ export default function Home() {
                 <span className="material-symbols-outlined text-primary" data-icon="rebase_edit">rebase_edit</span>
                 <span className="font-bold text-on-surface">Pembulatan</span>
               </div>
-              <div className="flex gap-2">
-                <button className="flex-1 py-3 px-2 rounded-lg text-xs font-bold bg-surface-container-lowest text-on-surface border border-outline-variant/20 hover:border-secondary transition-all">Tanpa</button>
-                <button className="flex-1 py-3 px-2 rounded-lg text-xs font-bold bg-surface-container-lowest text-on-surface border border-outline-variant/20 hover:border-secondary transition-all">50rb</button>
-                <button className="flex-1 py-3 px-2 rounded-lg text-xs font-bold bg-primary-container text-on-primary-container border border-primary-container">100rb</button>
+              <div className="flex flex-wrap gap-2">
+                {[
+                  { label: 'Tanpa', value: 0 },
+                  { label: '5rb', value: 5000 },
+                  { label: '10rb', value: 10000 },
+                  { label: '50rb', value: 50000 },
+                  { label: '100rb', value: 100000 }
+                ].map((option) => (
+                  <button 
+                    key={option.value}
+                    onClick={() => setRounding(option.value)}
+                    className={`flex-1 min-w-[15%] py-2 px-1 rounded-lg text-xs font-bold transition-all ${
+                      rounding === option.value 
+                        ? 'bg-primary-container text-on-primary-container border-solid border border-primary-container shadow-sm' 
+                        : 'bg-surface-container-lowest text-on-surface border border-outline-variant/20 hover:border-secondary'
+                    }`}
+                  >
+                    {option.label}
+                  </button>
+                ))}
               </div>
             </div>
           </div>
