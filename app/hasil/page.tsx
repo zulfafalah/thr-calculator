@@ -77,19 +77,19 @@ export default function HasilPage() {
           <p className="text-on-surface-variant/80 font-body">Pastikan kebahagiaan terbagi dengan merata.</p>
         </section>
         {/* Summary Banner Card */}
-        <section className="relative bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-outline-variant/30 overflow-hidden">
+        <section className="relative bg-surface-container-lowest rounded-2xl p-5 shadow-sm border border-outline-variant/30 overflow-hidden">
           {/* Shimmer Gold Top Border */}
-          <div className="flex flex-col gap-4 mb-6">
-            <div className="space-y-1 text-center border-b border-outline-variant/30 pb-4">
+          <div className="flex flex-col gap-2 mb-3">
+            <div className="space-y-1 text-center border-b border-outline-variant/30 pb-2">
               <p className="text-[10px] font-label uppercase tracking-widest text-on-surface-variant/70">Total Budget</p>
               <p className="text-xl md:text-2xl font-bold font-headline text-primary truncate">Rp 5.000.000</p>
             </div>
-            <div className="flex justify-center items-center divide-x divide-outline-variant/30">
-              <div className="space-y-1 px-6 sm:px-10 text-center">
+            <div className="flex items-center divide-x divide-outline-variant/30 w-full">
+              <div className="space-y-1 px-1 flex-1 text-center min-w-0">
                 <p className="text-[10px] font-label uppercase tracking-widest text-on-surface-variant/70">Terbagi</p>
                 <p className="text-sm md:text-base font-bold font-headline text-secondary truncate">Rp 5.150.000</p>
               </div>
-              <div className="space-y-1 px-6 sm:px-10 text-center">
+              <div className="space-y-1 px-1 flex-1 text-center min-w-0">
                 <p className="text-[10px] font-label uppercase tracking-widest text-on-surface-variant/70">Sisa</p>
                 <p className="text-sm md:text-base font-bold font-headline text-error truncate">-Rp 150.000</p>
               </div>
