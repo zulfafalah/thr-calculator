@@ -10,52 +10,52 @@ export default function PenerimaPage() {
       id: "orang-tua",
       title: "Orang Tua",
       weightLabel: "Bobot 3x",
+      weight: 3.0,
       icon: "elderly",
       bgIcon: "diversity_3",
       count: 2,
       active: true,
-      featured: false,
     },
     {
       id: "saudara",
       title: "Saudara Kandung",
       weightLabel: "Bobot 1x",
+      weight: 1.0,
       icon: "family_restroom",
       count: 3,
       active: true,
-      featured: false,
     },
     {
       id: "ponakan",
       title: "Ponakan",
       weightLabel: "Bobot 0.5x",
+      weight: 0.5,
       icon: "child_care",
       count: 12,
       active: true,
-      featured: false,
     },
     {
       id: "art",
       title: "Asisten Rumah Tangga",
       weightLabel: "Bobot 2x",
+      weight: 2.0,
       icon: "home_work",
       count: 2,
       active: true,
-      featured: false,
     },
     {
       id: "mertua",
       title: "Mertua",
-      weightLabel: "",
+      weightLabel: "Bobot 2x",
+      weight: 2.0,
       icon: "person_add",
       count: 0,
       active: true,
-      featured: false,
     },
   ]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [newCategory, setNewCategory] = useState({ title: "", weightLabel: "Bobot 1x" });
+  const [newCategory, setNewCategory] = useState({ title: "", weightLabel: "Bobot 1x", weight: 1.0 });
 
   const handleAddCategory = () => {
     if (!newCategory.title.trim()) return;
@@ -68,14 +68,14 @@ export default function PenerimaPage() {
         id: newId,
         title: newCategory.title,
         weightLabel: newCategory.weightLabel,
+        weight: newCategory.weight,
         icon: "person",
         count: 1,
         active: true,
-        featured: false,
       }
     ]);
 
-    setNewCategory({ title: "", weightLabel: "Bobot 1x" });
+    setNewCategory({ title: "", weightLabel: "Bobot 1x", weight: 1.0 });
     setIsModalOpen(false);
   };
 
@@ -136,8 +136,7 @@ export default function PenerimaPage() {
           {recipientsData.map((item) => (
             <div
               key={item.id}
-              className={`rounded-xl p-6 relative overflow-hidden group bg-surface-container-lowest shadow-[0_20px_40px_rgba(212,160,23,0.06)] border-t-2 ${item.featured ? "border-secondary" : "border-secondary/20"
-                }`}
+              className="rounded-xl p-6 relative overflow-hidden group bg-surface-container-lowest shadow-[0_20px_40px_rgba(212,160,23,0.06)] border-t-2 border-secondary/20"
             >
               {item.bgIcon && (
                 <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
@@ -164,12 +163,7 @@ export default function PenerimaPage() {
                   <div>
                     <h3 className="font-bold text-on-surface">{item.title}</h3>
                     {item.weightLabel && (
-                      <span
-                        className={`text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-tighter ${item.featured
-                          ? "bg-secondary-fixed text-on-secondary-fixed"
-                          : "bg-surface-container-highest text-on-surface-variant"
-                          }`}
-                      >
+                      <span className="text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-tighter bg-surface-container-highest text-on-surface-variant">
                         {item.weightLabel}
                       </span>
                     )}
@@ -258,13 +252,16 @@ export default function PenerimaPage() {
                 <div className="relative">
                   <select
                     className="w-full bg-surface-container-high text-on-surface rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-secondary transition-all appearance-none"
-                    value={newCategory.weightLabel}
-                    onChange={(e) => setNewCategory({ ...newCategory, weightLabel: e.target.value })}
+                    value={newCategory.weight}
+                    onChange={(e) => {
+                      const val = parseFloat(e.target.value);
+                      setNewCategory({ ...newCategory, weight: val, weightLabel: `Bobot ${val}x` });
+                    }}
                   >
-                    <option value="Bobot 0.5x">0.5x (Setengah)</option>
-                    <option value="Bobot 1x">1x (Normal)</option>
-                    <option value="Bobot 2x">2x (Ganda)</option>
-                    <option value="Bobot 3x">3x (Tiga Kali)</option>
+                    <option value={0.5}>0.5x (Setengah)</option>
+                    <option value={1}>1x (Normal)</option>
+                    <option value={2}>2x (Ganda)</option>
+                    <option value={3}>3x (Tiga Kali)</option>
                   </select>
                   <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none" data-icon="expand_more">expand_more</span>
                 </div>
