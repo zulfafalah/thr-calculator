@@ -81,18 +81,18 @@ export default function HasilPage() {
         {/* Summary Banner Card */}
         <section className="relative bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-outline-variant/30 overflow-hidden">
           {/* Shimmer Gold Top Border */}
-          <div className="grid grid-cols-3 gap-4 mb-6">
-            <div className="space-y-1">
+          <div className="grid grid-cols-3 gap-0 mb-6 divide-x divide-outline-variant/30">
+            <div className="space-y-1 pr-2 text-center">
               <p className="text-[10px] font-label uppercase tracking-widest text-on-surface-variant/70">Total Budget</p>
-              <p className="text-base font-bold font-headline text-primary">Rp 5.000.000</p>
+              <p className="text-sm md:text-base font-bold font-headline text-primary truncate">Rp 5.000.000</p>
             </div>
-            <div className="space-y-1 border-x border-outline-variant/30 px-4">
+            <div className="space-y-1 px-2 text-center">
               <p className="text-[10px] font-label uppercase tracking-widest text-on-surface-variant/70">Terbagi</p>
-              <p className="text-base font-bold font-headline text-secondary">Rp 5.150.000</p>
+              <p className="text-sm md:text-base font-bold font-headline text-secondary truncate">Rp 5.150.000</p>
             </div>
-            <div className="space-y-1 text-right">
+            <div className="space-y-1 pl-2 text-center">
               <p className="text-[10px] font-label uppercase tracking-widest text-on-surface-variant/70">Sisa</p>
-              <p className="text-base font-bold font-headline text-error">- Rp 150.000</p>
+              <p className="text-sm md:text-base font-bold font-headline text-error truncate">-Rp 150.000</p>
             </div>
           </div>
           {/* Progress Bar */}
