@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import BottomNavBar from '@/app/components/BottomNavBar';
 import Header from '@/app/components/Header';
+import { buildShareURL, restoreStateFromHash } from '@/app/lib/shareUtils';
 
 // --- Types ---
 
@@ -173,6 +175,22 @@ export default function HasilPage() {
   const [results, setResults] = useState<ResultItem[]>([]);
   const [config, setConfig] = useState<ThrConfig | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
+  const router = useRouter();
+
+  // ── Restore state from URL hash if present ──
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash && hash.length > 1) {
+      const restored = restoreStateFromHash(hash);
+      if (restored) {
+        // Clean the hash from the URL without reload
+        window.history.replaceState(null, '', window.location.pathname);
+        // Force re-render by triggering a router refresh
+        router.refresh();
+      }
+    }
+  }, [router]);
 
   useEffect(() => {
     const recipientsRaw = localStorage.getItem('recipients_data');
@@ -217,6 +235,49 @@ export default function HasilPage() {
 
   // ── Derived calculations ──
   const budget = config?.budget ?? 0;
+
+  const handleShare = useCallback(async () => {
+    const url = buildShareURL();
+
+    // Try native Web Share API first (mobile-friendly)
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Rincian THR',
+          text: `Lihat rincian pembagian THR: ${formatRupiah(budget)}`,
+          url,
+        });
+        return;
+      } catch (err) {
+        // User cancelled or share failed — fall through to clipboard
+        if ((err as DOMException).name === 'AbortError') return;
+      }
+    }
+
+    // Fallback: copy to clipboard
+    try {
+      await navigator.clipboard.writeText(url);
+      setToast('Link berhasil disalin!');
+    } catch {
+      // Final fallback for older browsers
+      const textarea = document.createElement('textarea');
+      textarea.value = url;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+      setToast('Link berhasil disalin!');
+    }
+  }, [budget]);
+
+  // Auto-hide toast
+  useEffect(() => {
+    if (!toast) return;
+    const timer = setTimeout(() => setToast(null), 2500);
+    return () => clearTimeout(timer);
+  }, [toast]);
   const totalAllocated = results.reduce((sum, r) => sum + r.total, 0);
   const sisa = budget - totalAllocated;
   const isOverBudget = totalAllocated > budget;
@@ -384,10 +445,21 @@ export default function HasilPage() {
         </div>
 
         {/* Action Button */}
-        <button className="w-full max-w-sm mx-auto bg-primary-container text-on-primary-container rounded-lg py-4 flex items-center justify-center gap-3 font-bold shadow-[0_10px_20px_rgba(27,67,50,0.2)] hover:bg-primary transition-all active:scale-95">
+        <button
+          onClick={handleShare}
+          className="w-full max-w-sm mx-auto bg-primary-container text-on-primary-container rounded-lg py-4 flex items-center justify-center gap-3 font-bold shadow-[0_10px_20px_rgba(27,67,50,0.2)] hover:bg-primary transition-all active:scale-95"
+        >
           <span className="material-symbols-outlined" data-icon="share">share</span>
           Bagikan Ringkasan
         </button>
+
+        {/* Toast notification */}
+        {toast && (
+          <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-inverse-surface text-inverse-on-surface px-5 py-3 rounded-full text-sm font-medium shadow-lg animate-fade-in-down flex items-center gap-2">
+            <span className="material-symbols-outlined text-base" data-icon="check_circle">check_circle</span>
+            {toast}
+          </div>
+        )}
       </main>
 
       <BottomNavBar />
