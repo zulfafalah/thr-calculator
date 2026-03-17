@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 
 export default function Header() {
   return (
@@ -8,9 +9,9 @@ export default function Header() {
         <h1 className="text-xl font-bold text-on-surface tracking-tight font-headline">Kalkulator THR</h1>
       </div>
       <div className="flex items-center gap-4">
-        <button className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-primary/10 transition-colors active:scale-95 duration-150">
+        <Link href="/tentang" className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-primary/10 transition-colors active:scale-95 duration-150">
           <span className="material-symbols-outlined" data-icon="info">info</span>
-        </button>
+        </Link>
       </div>
     </header>
   );
