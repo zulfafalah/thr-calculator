@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import BottomNavBar from '@/app/components/BottomNavBar';
 import Header from '@/app/components/Header';
@@ -54,6 +54,20 @@ export default function PenerimaPage() {
       active: true,
     },
   ]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('recipients_data');
+    if (saved) {
+      try {
+        const data = JSON.parse(saved);
+        if (Array.isArray(data) && data.length > 0) {
+          setRecipientsData(data);
+        }
+      } catch (e) {
+        // ignore invalid JSON
+      }
+    }
+  }, []);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newCategory, setNewCategory] = useState({ title: "", weightLabel: "Bobot 1x", weight: 1.0 });

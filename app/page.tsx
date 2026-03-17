@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import BottomNavBar from '@/app/components/BottomNavBar';
 import Header from '@/app/components/Header';
@@ -10,6 +10,20 @@ export default function Home() {
   const [distributionMode, setDistributionMode] = useState<'weighted' | 'equal'>('weighted');
   const [rounding, setRounding] = useState<number>(0);
 
+
+  useEffect(() => {
+    const saved = localStorage.getItem('thr_config');
+    if (saved) {
+      try {
+        const config = JSON.parse(saved);
+        if (config.budgetFormatted) setBudget(config.budgetFormatted);
+        if (config.distributionMode) setDistributionMode(config.distributionMode);
+        if (config.rounding !== undefined) setRounding(config.rounding);
+      } catch (e) {
+        // ignore invalid JSON
+      }
+    }
+  }, []);
 
   const handleBudgetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // Remove non-digit characters
