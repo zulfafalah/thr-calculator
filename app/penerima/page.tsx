@@ -6,6 +6,8 @@ import BottomNavBar from '@/app/components/BottomNavBar';
 import Header from '@/app/components/Header';
 
 export default function PenerimaPage() {
+  const [distributionMode, setDistributionMode] = useState<'weighted' | 'equal'>('weighted');
+
   const [recipientsData, setRecipientsData] = useState([
     {
       id: "orang-tua",
@@ -56,6 +58,16 @@ export default function PenerimaPage() {
   ]);
 
   useEffect(() => {
+    const savedConfig = localStorage.getItem('thr_config');
+    if (savedConfig) {
+      try {
+        const config = JSON.parse(savedConfig);
+        if (config.distributionMode) setDistributionMode(config.distributionMode);
+      } catch (e) {
+        // ignore invalid JSON
+      }
+    }
+
     const saved = localStorage.getItem('recipients_data');
     if (saved) {
       try {
@@ -121,9 +133,9 @@ export default function PenerimaPage() {
     <>
       <Header />
 
-      <main className="max-w-md mx-auto px-6 pt-12 pb-[240px] relative">
+      <main className="max-w-md mx-auto px-6 pt-1 pb-[240px] relative">
         {/* Hero Section */}
-        <section className="mb-12 text-center relative">
+        <section className="mb-5 text-center relative">
           <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-48 h-48 bg-secondary/5 rounded-full blur-3xl"></div>
           <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-container text-on-primary-container rounded-2xl mb-6 shadow-xl">
             <span className="material-symbols-outlined text-4xl" data-icon="family_history" style={{ fontVariationSettings: "'FILL' 1" }}>family_history</span>
@@ -170,11 +182,15 @@ export default function PenerimaPage() {
                   </div>
                   <div>
                     <h3 className="font-bold text-on-surface">{item.title}</h3>
-                    {item.weightLabel && (
+                    {distributionMode === 'equal' ? (
+                      <span className="text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-tighter bg-primary/10 text-primary">
+                        Rata Rata
+                      </span>
+                    ) : item.weightLabel ? (
                       <span className="text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-tighter bg-surface-container-highest text-on-surface-variant">
                         {item.weightLabel}
                       </span>
-                    )}
+                    ) : null}
                   </div>
                 </div>
                 <div className="relative flex items-center justify-center">
@@ -305,7 +321,6 @@ export default function PenerimaPage() {
                 <span className="text-on-primary-container font-headline font-bold text-xl">
                   Total {recipientsData.reduce((acc, curr) => curr.active ? acc + curr.count : acc, 0)} Orang
                 </span>
-                <span className="text-secondary-fixed text-xs mt-0.5 opacity-90">• Est. Rp 450.000/org</span>
               </div>
             </div>
             <Link href="/hasil" onClick={handleLihatHasil} className="bg-secondary-fixed-dim hover:bg-secondary text-on-secondary-fixed font-bold px-4 py-3 rounded-xl transition-all active:scale-95 shadow-lg flex items-center gap-1 flex-shrink-0">
