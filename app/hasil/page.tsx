@@ -394,7 +394,8 @@ export default function HasilPage() {
             return (
               <div
                 key={slot.slotId}
-                className={`rounded-xl p-5 shadow-sm flex items-center justify-between group transition-all duration-300 ${
+                onClick={() => toggleDistributed(slot.slotId)}
+                className={`rounded-xl p-5 shadow-sm flex items-center justify-between group transition-all duration-300 cursor-pointer ${
                   slot.distributed
                     ? 'bg-surface-container-low opacity-70 grayscale-[0.5]'
                     : 'bg-surface-container-lowest'
@@ -408,14 +409,14 @@ export default function HasilPage() {
                     <h4 className="font-bold text-on-surface">{displayTitle}</h4>
                     <p className="text-xs text-on-surface-variant">
                       {formatRupiah(slot.amountPerPerson)}
-                      <span className="ml-1 opacity-60">({slot.weightLabel})</span>
+                      <span className="ml-1 opacity-60">({config?.distributionMode === 'equal' ? 'Rata Rata' : slot.weightLabel})</span>
                     </p>
                   </div>
                 </div>
 
                 {slot.distributed ? (
                   <button
-                    onClick={() => toggleDistributed(slot.slotId)}
+                    onClick={(e) => { e.stopPropagation(); toggleDistributed(slot.slotId); }}
                     className="flex flex-col items-center gap-1 cursor-pointer"
                   >
                     <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center">
@@ -425,7 +426,7 @@ export default function HasilPage() {
                   </button>
                 ) : (
                   <button
-                    onClick={() => toggleDistributed(slot.slotId)}
+                    onClick={(e) => { e.stopPropagation(); toggleDistributed(slot.slotId); }}
                     className="flex flex-col items-center gap-1 group/btn cursor-pointer"
                   >
                     <div className="w-8 h-8 rounded-full border-2 border-outline-variant flex items-center justify-center text-outline-variant group-hover/btn:border-secondary group-hover/btn:text-secondary transition-all">

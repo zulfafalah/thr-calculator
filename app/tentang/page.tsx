@@ -159,7 +159,7 @@ export default function TentangPage() {
               <div className="flex flex-col gap-1">
                 <span className="font-semibold text-on-surface text-sm">Berjalan Sepenuhnya di Perangkatmu</span>
                 <p className="text-sm text-on-surface-variant leading-relaxed">
-                  Aplikasi ini bersifat <strong className="text-on-surface">client-side</strong> — semua proses kalkulasi berjalan langsung di browser kamu, tanpa melibatkan server sama sekali.
+                  Aplikasi ini bersifat <strong className="text-on-surface">client-side</strong> semua proses kalkulasi berjalan langsung di browser kamu, tanpa melibatkan server sama sekali.
                 </p>
               </div>
             </div>

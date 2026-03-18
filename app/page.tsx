@@ -92,6 +92,7 @@ export default function Home() {
                 className="w-full bg-transparent border-none p-0 pl-12 text-5xl font-headline font-bold text-primary focus:ring-0 outline-none placeholder:text-surface-container-highest" 
                 placeholder="0" 
                 type="text" 
+                inputMode="numeric"
                 value={budget}
                 onChange={handleBudgetChange}
               />

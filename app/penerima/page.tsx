@@ -46,15 +46,6 @@ export default function PenerimaPage() {
       count: 0,
       active: true,
     },
-    {
-      id: "mertua",
-      title: "Mertua",
-      weightLabel: "Bobot 2x",
-      weight: 2.0,
-      icon: "person_add",
-      count: 0,
-      active: true,
-    },
   ]);
 
   useEffect(() => {
