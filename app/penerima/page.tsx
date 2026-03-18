@@ -75,6 +75,27 @@ export default function PenerimaPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newCategory, setNewCategory] = useState({ title: "", weightLabel: "Bobot 1x", weight: 1.0 });
 
+  const [editingWeightId, setEditingWeightId] = useState<string | null>(null);
+  const [editingWeightValue, setEditingWeightValue] = useState<string>('');
+
+  const startEditWeight = (id: string, currentWeight: number) => {
+    setEditingWeightId(id);
+    setEditingWeightValue(String(currentWeight));
+  };
+
+  const commitEditWeight = (id: string) => {
+    const val = parseFloat(editingWeightValue);
+    if (!isNaN(val) && val > 0) {
+      setRecipientsData(prev => prev.map(item => {
+        if (item.id === id) {
+          return { ...item, weight: val, weightLabel: `Bobot ${val}x` };
+        }
+        return item;
+      }));
+    }
+    setEditingWeightId(null);
+  };
+
   const handleAddCategory = () => {
     if (!newCategory.title.trim()) return;
 
@@ -177,10 +198,33 @@ export default function PenerimaPage() {
                       <span className="text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-tighter bg-primary/10 text-primary">
                         Rata Rata
                       </span>
+                    ) : editingWeightId === item.id ? (
+                      <div className="flex items-center gap-1">
+                        <input
+                          type="number"
+                          min="0.1"
+                          step="0.5"
+                          className="w-16 text-[11px] font-bold px-2 py-0.5 rounded-lg bg-surface-container-high text-on-surface outline-none focus:ring-2 focus:ring-secondary transition-all"
+                          value={editingWeightValue}
+                          autoFocus
+                          onChange={(e) => setEditingWeightValue(e.target.value)}
+                          onBlur={() => commitEditWeight(item.id)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') commitEditWeight(item.id);
+                            if (e.key === 'Escape') setEditingWeightId(null);
+                          }}
+                        />
+                        <span className="text-[10px] text-on-surface-variant font-bold">x</span>
+                      </div>
                     ) : item.weightLabel ? (
-                      <span className="text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-tighter bg-surface-container-highest text-on-surface-variant">
+                      <button
+                        onClick={() => startEditWeight(item.id, item.weight)}
+                        title="Ketuk untuk ubah bobot"
+                        className="flex items-center gap-1 text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-tighter bg-surface-container-highest text-on-surface-variant hover:bg-secondary/20 hover:text-secondary transition-colors cursor-pointer"
+                      >
                         {item.weightLabel}
-                      </span>
+                        <span className="material-symbols-outlined" style={{ fontSize: '10px' }} data-icon="edit">edit</span>
+                      </button>
                     ) : null}
                   </div>
                 </div>
