@@ -150,6 +150,42 @@ export default function TentangPage() {
           </div>
         </section>
 
+        {/* Privasi & Client-Side */}
+        <section className="flex flex-col gap-3">
+          <h3 className="text-xs font-label font-bold uppercase tracking-widest text-on-surface-variant/60 px-1">Privasi & Data</h3>
+          <div className="bg-surface-container rounded-2xl p-5 flex flex-col gap-3 border border-outline-variant/20">
+            <div className="flex items-start gap-3">
+              <span className="material-symbols-outlined text-primary text-xl mt-0.5" style={{ fontVariationSettings: "'FILL' 1" }}>shield_lock</span>
+              <div className="flex flex-col gap-1">
+                <span className="font-semibold text-on-surface text-sm">Berjalan Sepenuhnya di Perangkatmu</span>
+                <p className="text-sm text-on-surface-variant leading-relaxed">
+                  Aplikasi ini bersifat <strong className="text-on-surface">client-side</strong> — semua proses kalkulasi berjalan langsung di browser kamu, tanpa melibatkan server sama sekali.
+                </p>
+              </div>
+            </div>
+            <div className="h-px bg-outline-variant/20" />
+            <div className="flex items-start gap-3">
+              <span className="material-symbols-outlined text-secondary text-xl mt-0.5" style={{ fontVariationSettings: "'FILL' 1" }}>database_off</span>
+              <div className="flex flex-col gap-1">
+                <span className="font-semibold text-on-surface text-sm">Tidak Ada Data di Server</span>
+                <p className="text-sm text-on-surface-variant leading-relaxed">
+                  Tidak ada data apapun yang dikirim atau disimpan di server. Semua data yang kamu masukkan anggaran, nama penerima, dan hasil perhitungan hanya tersimpan di perangkatmu sendiri.
+                </p>
+              </div>
+            </div>
+            <div className="h-px bg-outline-variant/20" />
+            <div className="flex items-start gap-3">
+              <span className="material-symbols-outlined text-tertiary text-xl mt-0.5" style={{ fontVariationSettings: "'FILL' 1" }}>devices</span>
+              <div className="flex flex-col gap-1">
+                <span className="font-semibold text-on-surface text-sm">Data Tersimpan Lokal</span>
+                <p className="text-sm text-on-surface-variant leading-relaxed">
+                  Data disimpan menggunakan penyimpanan lokal browser (<strong className="text-on-surface">localStorage</strong>). Data hanya ada di browser kamu dan tidak bisa diakses oleh siapapun selain kamu.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Open Source */}
         <section className="flex flex-col gap-3">
           <h3 className="text-xs font-label font-bold uppercase tracking-widest text-on-surface-variant/60 px-1">Kode Sumber</h3>
