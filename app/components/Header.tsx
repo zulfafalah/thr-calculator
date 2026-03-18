@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export default function Header() {
   return (
-    <header className="flex justify-between items-center px-6 py-4 w-full bg-surface/80 backdrop-blur-xl docked full-width top-0 sticky z-50">
+    <header className="flex justify-between items-center px-6 py-2 w-full bg-surface/80 backdrop-blur-xl docked full-width top-0 sticky z-50">
       <div className="flex items-center gap-3">
         <span className="material-symbols-outlined text-primary text-2xl" data-icon="mosque">mosque</span>
         <h1 className="text-xl font-bold text-on-surface tracking-tight font-headline">Kalkulator THR</h1>
